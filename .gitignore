@@ -13,3 +13,8 @@ build/
 /captures
 .externalNativeBuild
 .cxx
+
+### Firebase ###
+.firebase
+.firebaserc
+firebase.json
