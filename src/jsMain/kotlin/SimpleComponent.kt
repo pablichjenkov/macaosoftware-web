@@ -1,4 +1,3 @@
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,7 +7,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -17,17 +15,14 @@ import com.pablichj.templato.component.core.consumeBackPressEvent
 
 class SimpleComponent(
     val text: String,
-    val bgColor: Color,
     val onMessage: (Msg) -> Unit
 ) : Component() {
 
-    override fun start() {
-        super.start()
+    override fun onStart() {
         println("SimpleComponent::start()")
     }
 
-    override fun stop() {
-        super.stop()
+    override fun onStop() {
         println("SimpleComponent::stop()")
     }
 
@@ -39,12 +34,12 @@ class SimpleComponent(
     override fun Content(modifier: Modifier) {
         println("SimpleComponent::Composing()")
         consumeBackPressEvent()
-        Box(modifier = modifier.fillMaxSize().background(bgColor)) {
+        Box(modifier = modifier.fillMaxSize()) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                text = text,
+                text = "$text ... coming soon",
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
             )

@@ -23,9 +23,9 @@ object PanelBuilder {
                 component = CustomTopBarComponent("Orders", StackComponent.DefaultConfig) {},
             ),
             NavItem(
-                label = "Settings",
+                label = "Contact Us",
                 icon = Icons.Filled.Email,
-                component = CustomTopBarComponent("Settings", StackComponent.DefaultConfig) {},
+                component = AboutTopBarComponent("Contact Us", StackComponent.DefaultConfig)
             )
         )
 

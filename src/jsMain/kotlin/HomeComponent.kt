@@ -1,10 +1,14 @@
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -16,37 +20,139 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pablichj.templato.component.core.Component
 import com.pablichj.templato.component.core.consumeBackPressEvent
+import com.pablichj.templato.component.core.getRouter
+import com.pablichj.templato.component.core.router.DeepLinkMatchData
+import com.pablichj.templato.component.core.router.DeepLinkMatchType
+import com.pablichj.templato.component.core.router.DeepLinkMsg
 
 class HomeComponent : Component() {
 
-    override fun start() {
-        super.start()
-        println("HomeComponent::start()")
+    override fun onStart() {
+        println("HomeComponent::onStart()")
     }
 
-    override fun stop() {
-        super.stop()
-        println("HomeComponent::stop()")
+    override fun onStop() {
+        println("HomeComponent::onStop()")
     }
+
+    // region: DeepLink
+
+    override fun getDeepLinkHandler(): DeepLinkMatchData {
+        return DeepLinkMatchData(
+            "Home",
+            DeepLinkMatchType.MatchOne
+        )
+    }
+
+    // endregion
 
     @Composable
     override fun Content(modifier: Modifier) {
         println("HomeComponent::Composing()")
         consumeBackPressEvent()
-        AcceptPrivacyScreen()
+        // HomeScreen()
+        HomeScreen1 {
+            val deepLinkPath = listOf("Contact Us")
+            val deepLinkMsg = DeepLinkMsg(
+                deepLinkPath
+            ) {
+                println("MainWindowNode::deepLinkResult = $it")
+            }
+            getRouter()?.handleDeepLink(deepLinkMsg)
+        }
     }
 
 }
 
 @Composable
-fun AcceptPrivacyScreen() {
+fun HomeScreen1(
+    onContactUsClick: () -> Unit
+) {
+    val amadeusHotelAppUrl = remember { "https://github.com/pablichjenkov/amadeus-hotel-app" }
+    val annotatedString = buildAnnotatedString {
+        append(amadeusHotelAppUrl)
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.SemiBold
+            ),
+            start = 0,
+            end = amadeusHotelAppUrl.length
+        )
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "The Company",
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = "Macao is a digital agency located in Miami Florida. The company specializes in bringing digital products to life, such as mobile and web Applications.",
+            style = MaterialTheme.typography.body1
+        )
+        Spacer(Modifier.height(32.dp))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "Some Work",
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.h5,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.h6,
+            text = "Amadeus Hotel App"
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.body1,
+            text = "A sample App to book hotels using the Amadeus self service API. Visit the link bellow for more information"
+        )
+        Spacer(Modifier.height(16.dp))
+        val uriHandler = LocalUriHandler.current
+        Text(
+            modifier = Modifier.fillMaxWidth().clickable {
+                uriHandler.openUri(amadeusHotelAppUrl)
+            },
+            style = MaterialTheme.typography.body1,
+            text = annotatedString
+        )
+        Spacer(Modifier.height(56.dp))
+        Button(
+            modifier = Modifier.wrapContentSize(),
+            onClick = {
+                onContactUsClick()
+            }
+        ) {
+            Text("Contact Us")
+        }
+    }
+}
+
+@Composable
+fun HomeScreen() {
     @Composable
     fun TermsAndConditions() {
         val fullText = "By clicking Accept, you agree to our Privacy Policy and Terms of Service."
@@ -78,9 +184,9 @@ fun AcceptPrivacyScreen() {
                 )
             }
         }
-        /*val uriHandler = LocalUriHandler.current
+        val uriHandler = LocalUriHandler.current
         ClickableText(
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.body1,
             text = annotatedString,
             onClick = { offset ->
                 tags.firstNotNullOfOrNull { (_, tag) ->
@@ -89,7 +195,7 @@ fun AcceptPrivacyScreen() {
                     uriHandler.openUri(string.item)
                 }
             }
-        )*/
+        )
     }
 
     Scaffold(

@@ -6,10 +6,9 @@ import com.pablichj.templato.component.core.router.DeepLinkMatchType
 import com.pablichj.templato.component.core.stack.StackBarItem
 import com.pablichj.templato.component.core.topbar.TopBarComponent
 
-class CustomTopBarComponent(
+class AboutTopBarComponent(
     val screenName: String,
-    config: Config,
-    val onMessage: (Msg) -> Unit
+    config: Config
 ) : TopBarComponent(config) {
 
     val Step1 = SimpleComponent(
@@ -17,38 +16,12 @@ class CustomTopBarComponent(
     ) { msg ->
         when (msg) {
             SimpleComponent.Msg.Next -> {
-                backStack.push(Step2)
+                // backStack.push(Step2)
             }
         }
     }.also {
-        it.setParent(this@CustomTopBarComponent)
+        it.setParent(this@AboutTopBarComponent)
     }
-
-    val Step2 = SimpleComponent(
-        screenName,
-    ) { msg ->
-        when (msg) {
-            SimpleComponent.Msg.Next -> {
-                backStack.push(Step3)
-            }
-        }
-    }.also {
-        it.setParent(this@CustomTopBarComponent)
-    }
-
-    val Step3 =
-        SimpleComponent(
-            "$screenName / Page 1 / Page 2 / Page 3",
-        ) { msg ->
-            when (msg) {
-                SimpleComponent.Msg.Next -> {
-                    onMessage(Msg.OnboardDone)
-                    //router?.handleDeepLink("Settings")
-                }
-            }
-        }.also {
-            it.setParent(this@CustomTopBarComponent)
-        }
 
     override fun onStart() {
         println("CustomTopBarComponent::onStart()")
@@ -64,20 +37,6 @@ class CustomTopBarComponent(
             Step1 -> {
                 StackBarItem(
                     Step1.text,
-                    Icons.Filled.Star,
-                )
-            }
-
-            Step2 -> {
-                StackBarItem(
-                    Step2.text,
-                    Icons.Filled.Star,
-                )
-            }
-
-            Step3 -> {
-                StackBarItem(
-                    Step3.text,
                     Icons.Filled.Star,
                 )
             }
@@ -99,17 +58,11 @@ class CustomTopBarComponent(
 
     override fun getChildForNextUriFragment(nextUriFragment: String): Component? {
         return when (nextUriFragment) {
-            "Page1" -> Step1
-            "Page2" -> Step2
-            "Page3" -> Step3
+            "contact_us" -> Step1
             else -> null
         }
     }
 
     // endregion
-
-    sealed interface Msg {
-        object OnboardDone : Msg
-    }
 
 }

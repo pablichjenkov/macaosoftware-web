@@ -18,7 +18,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(compose.runtime)
-                implementation("io.github.pablichjenkov:component-toolkit:0.1.30")
+                implementation("io.github.pablichjenkov:component-toolkit:0.3.0")
             }
         }
     }
