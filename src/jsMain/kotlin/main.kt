@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -41,7 +40,6 @@ internal fun RootView() {
         }
     }
     Scaffold(
-        modifier = Modifier.windowInsetsPadding(WindowInsets.safeContent),
         topBar = {
             Box(modifier = Modifier
                 .height(56.dp)
@@ -59,7 +57,6 @@ internal fun RootView() {
                         fontWeight = FontWeight.Bold
                     )
                 )
-                //TopBar(topBarState)
             }
 
         }

@@ -5,20 +5,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,13 +25,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pablichj.templato.component.core.Component
-import com.pablichj.templato.component.core.consumeBackPressEvent
 import com.pablichj.templato.component.core.getRouter
 import com.pablichj.templato.component.core.router.DeepLinkMatchData
 import com.pablichj.templato.component.core.router.DeepLinkMatchType
 import com.pablichj.templato.component.core.router.DeepLinkMsg
+import com.pablichj.templato.component.core.topbar.TopBar
+import com.pablichj.templato.component.core.topbar.TopBarState
+import com.pablichj.templato.component.core.topbar.TopBarStatePresenterDefault
 
 class HomeComponent : Component() {
+
+    private val topBarStatePresenter = TopBarStatePresenterDefault()
+
+    init {
+        topBarStatePresenter.topBarState.value = TopBarState(
+            title = "Home",
+            onTitleClick = {}
+        )
+    }
 
     override fun onStart() {
         println("HomeComponent::onStart()")
@@ -59,24 +65,35 @@ class HomeComponent : Component() {
 
     @Composable
     override fun Content(modifier: Modifier) {
-        println("HomeComponent::Composing()")
-        consumeBackPressEvent()
-        // HomeScreen()
-        HomeScreen1 {
-            val deepLinkPath = listOf("Contact Us")
-            val deepLinkMsg = DeepLinkMsg(
-                deepLinkPath
-            ) {
-                println("MainWindowNode::deepLinkResult = $it")
-            }
-            getRouter()?.handleDeepLink(deepLinkMsg)
+        println(
+            """${instanceId()}.Composing()}
+                |lifecycleState = ${lifecycleState}
+            """
+        )
+        Scaffold(
+            modifier = modifier,
+            topBar = { TopBar(topBarStatePresenter) }
+        ) { paddingValues ->
+            HomeScreen(
+                modifier = Modifier.padding(paddingValues),
+                onContactUsClick = {
+                    val deepLinkPath = listOf("Contact Us")
+                    val deepLinkMsg = DeepLinkMsg(
+                        deepLinkPath
+                    ) {
+                        println("MainWindowNode::deepLinkResult = $it")
+                    }
+                    getRouter()?.handleDeepLink(deepLinkMsg)
+                }
+            )
         }
     }
 
 }
 
 @Composable
-fun HomeScreen1(
+fun HomeScreen(
+    modifier: Modifier,
     onContactUsClick: () -> Unit
 ) {
     val amadeusHotelAppUrl = remember { "https://github.com/pablichjenkov/amadeus-hotel-app" }
@@ -93,7 +110,8 @@ fun HomeScreen1(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier.fillMaxSize().padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -147,102 +165,6 @@ fun HomeScreen1(
             }
         ) {
             Text("Contact Us")
-        }
-    }
-}
-
-@Composable
-fun HomeScreen() {
-    @Composable
-    fun TermsAndConditions() {
-        val fullText = "By clicking Accept, you agree to our Privacy Policy and Terms of Service."
-        val tags = listOf(
-            Triple("Privacy Policy", "privacy", "https://composables.com/privacy"),
-            Triple("Terms of Service", "terms", "https://composables.com/terms"),
-        )
-
-        val annotatedString = buildAnnotatedString {
-            append(fullText)
-            tags.forEach { (text, tag, url) ->
-                val start = fullText.indexOf(text)
-                val end = start + text.length
-
-                addStyle(
-                    style = SpanStyle(
-                        color = MaterialTheme.colors.primary,
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    start = start,
-                    end = end
-                )
-
-                addStringAnnotation(
-                    tag = tag,
-                    annotation = url,
-                    start = start,
-                    end = end
-                )
-            }
-        }
-        val uriHandler = LocalUriHandler.current
-        ClickableText(
-            style = MaterialTheme.typography.body1,
-            text = annotatedString,
-            onClick = { offset ->
-                tags.firstNotNullOfOrNull { (_, tag) ->
-                    annotatedString.getStringAnnotations(tag, offset, offset).firstOrNull()
-                }?.let { string ->
-                    uriHandler.openUri(string.item)
-                }
-            }
-        )
-    }
-
-    Scaffold(
-        contentColor = MaterialTheme.colors.onSurface,
-        backgroundColor = MaterialTheme.colors.surface
-    ) { padding ->
-        Column(
-            Modifier
-                .padding(padding)
-                .padding(top = 100.dp)
-                .padding(horizontal = 24.dp)
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier.size(80.dp)
-            ) {
-                Icon(
-                    Icons.Rounded.Lock,
-                    contentDescription = "Icon",
-                    modifier = Modifier.padding(12.dp)
-                )
-            }
-
-            Spacer(Modifier.height(36.dp))
-            Text(
-                text = "We respect your privacy",
-                style = MaterialTheme.typography.h4
-            )
-            Spacer(Modifier.height(36.dp))
-            Text(
-                text = "We take your personal information seriously and are committed to keeping it secure. We only collect the necessary data to provide you with the best possible service and never share or sell your information to third parties without your explicit consent.",
-            )
-            Spacer(Modifier.height(12.dp))
-            TermsAndConditions()
-
-            Spacer(Modifier.weight(1f))
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                Text("Accept")
-            }
-            TextButton(
-                onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colors.onSurface)
-            ) {
-                Text("Reject")
-            }
-            Spacer(Modifier.padding(12.dp))
         }
     }
 }

@@ -5,15 +5,19 @@ import com.pablichj.templato.component.core.router.DeepLinkMatchData
 import com.pablichj.templato.component.core.router.DeepLinkMatchType
 import com.pablichj.templato.component.core.stack.StackBarItem
 import com.pablichj.templato.component.core.topbar.TopBarComponent
+import com.pablichj.templato.component.core.topbar.TopBarStatePresenterDefault
 
 class CustomTopBarComponent(
     val screenName: String,
     config: Config,
     val onMessage: (Msg) -> Unit
-) : TopBarComponent(config) {
+) : TopBarComponent<TopBarStatePresenterDefault>(
+    createDefaultState(),
+    config
+) {
 
     val Step1 = SimpleComponent(
-        screenName,
+        "$screenName/Page 1",
     ) { msg ->
         when (msg) {
             SimpleComponent.Msg.Next -> {
@@ -25,7 +29,7 @@ class CustomTopBarComponent(
     }
 
     val Step2 = SimpleComponent(
-        screenName,
+        "$screenName/Page 2",
     ) { msg ->
         when (msg) {
             SimpleComponent.Msg.Next -> {
@@ -38,7 +42,7 @@ class CustomTopBarComponent(
 
     val Step3 =
         SimpleComponent(
-            "$screenName / Page 1 / Page 2 / Page 3",
+            "$screenName/Page 3",
         ) { msg ->
             when (msg) {
                 SimpleComponent.Msg.Next -> {
