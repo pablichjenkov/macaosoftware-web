@@ -13,12 +13,16 @@ kotlin {
     js(IR) {
         browser()
         binaries.executable()
+        generateTypeScriptDefinitions()
     }
     sourceSets {
         val jsMain by getting {
             dependencies {
                 implementation(compose.runtime)
-                implementation("io.github.pablichjenkov:component-toolkit:0.3.1")
+                implementation(compose.foundation)
+                implementation(compose.ui)
+                implementation(compose.material)
+                implementation("io.github.pablichjenkov:component-toolkit:0.4.5")
             }
         }
     }
