@@ -22,7 +22,9 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.ui)
                 implementation(compose.material)
+                implementation(compose.materialIconsExtended)
                 implementation("io.github.pablichjenkov:component-toolkit:0.4.5")
+                implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-beta01")
             }
         }
     }
