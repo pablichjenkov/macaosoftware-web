@@ -1,10 +1,5 @@
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -13,16 +8,20 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.mohamedrejeb.richeditor.ui.material3.OutlinedRichTextEditor
+import com.mohamedrejeb.richeditor.ui.material3.RichText
 import com.pablichj.templato.component.core.Component
 import com.pablichj.templato.component.core.router.DeepLinkMatchData
 import com.pablichj.templato.component.core.router.DeepLinkMatchType
@@ -84,47 +83,56 @@ class AboutUsTopBarComponent(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendMessageForm(
     modifier: Modifier,
     sendMessageState: SendMessageState
 ) {
+    val outlinedRichTextState = rememberRichTextState()
     Column(
         modifier = modifier.fillMaxSize().padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .verticalScroll(rememberScrollState())
     ) {
         Text(
-            text = "Send us a brief explanation of what you App will do:",
+            text = "Send us a brief explanation of what your App will do:",
             fontSize = TextUnit(20F, TextUnitType.Sp),
             fontWeight = FontWeight.SemiBold
         )
         Spacer(Modifier.height(24.dp))
-        TextField(
-            modifier = Modifier.fillMaxWidth().height(200.dp),
-            value = sendMessageState.topLeftText.value,
-            onValueChange = {
-                sendMessageState.topLeftText.value = it
-            }
+        OutlinedRichTextEditor(
+            modifier = Modifier.fillMaxWidth(),
+            state = outlinedRichTextState,
         )
-        Button(
-            enabled = true,
-            onClick = {},
-            modifier = Modifier.wrapContentSize()
-        ) {
-            Text("Send")
-        }
-        Spacer(Modifier.height(8.dp))
-        TextButton(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.textButtonColors(
-                contentColor = MaterialTheme.colors.onSurface.copy(
-                    alpha = 0.66f
+        RichTextStyleRow(
+            modifier = Modifier.fillMaxWidth(),
+            state = outlinedRichTextState,
+        )
+        Spacer(Modifier.height(48.dp))
+        RichText(
+            modifier = Modifier.fillMaxWidth()
+                .heightIn(min = 200.dp)
+                .border(width = 1.dp, color = Color.Black),
+            state = outlinedRichTextState,
+        )
+        Spacer(Modifier.height(16.dp))
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            TextButton(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = MaterialTheme.colors.onSurface.copy(
+                        alpha = 0.66f
+                    )
                 )
-            )
-        ) {
-            Text("Already have an account? Sign in")
+            ) {
+                Button(
+                    enabled = true,
+                    onClick = {},
+                    modifier = Modifier.wrapContentSize()
+                ) {
+                    Text("Send")
+                }
+            }
         }
     }
 }
