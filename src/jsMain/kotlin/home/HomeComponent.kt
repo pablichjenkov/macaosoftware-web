@@ -1,19 +1,13 @@
+package home
+
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,14 +18,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.pablichj.templato.component.core.Component
-import com.pablichj.templato.component.core.getRouter
-import com.pablichj.templato.component.core.router.DeepLinkMatchData
-import com.pablichj.templato.component.core.router.DeepLinkMatchType
-import com.pablichj.templato.component.core.router.DeepLinkMsg
-import com.pablichj.templato.component.core.topbar.TopBar
-import com.pablichj.templato.component.core.topbar.TopBarState
-import com.pablichj.templato.component.core.topbar.TopBarStatePresenterDefault
+import com.macaosoftware.component.core.Component
+import com.macaosoftware.component.core.deeplink.DeepLinkMsg
+import com.macaosoftware.component.core.deeplink.DefaultDeepLinkManager
+import com.macaosoftware.component.core.deeplink.LocalRootComponentProvider
+import com.macaosoftware.component.topbar.TopBar
+import com.macaosoftware.component.topbar.TopBarState
+import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 
 class HomeComponent : Component() {
 
@@ -52,17 +45,6 @@ class HomeComponent : Component() {
         println("HomeComponent::onStop()")
     }
 
-    // region: DeepLink
-
-    override fun getDeepLinkHandler(): DeepLinkMatchData {
-        return DeepLinkMatchData(
-            "Home",
-            DeepLinkMatchType.MatchOne
-        )
-    }
-
-    // endregion
-
     @Composable
     override fun Content(modifier: Modifier) {
         println(
@@ -74,16 +56,18 @@ class HomeComponent : Component() {
             modifier = modifier,
             topBar = { TopBar(topBarStatePresenter) }
         ) { paddingValues ->
+            val rootComponent = LocalRootComponentProvider.current
             HomeScreen(
                 modifier = Modifier.padding(paddingValues),
                 onContactUsClick = {
-                    val deepLinkPath = listOf("Contact Us")
-                    val deepLinkMsg = DeepLinkMsg(
-                        deepLinkPath
-                    ) {
-                        println("MainWindowNode::deepLinkResult = $it")
+                    val deepLinkPath = listOf(
+                        "navigation_panel_component",
+                        "contact_us"
+                    )
+                    val deepLinkMsg = DeepLinkMsg(deepLinkPath) {
+                        println("HomeComponent::deepLinkResult = $it")
                     }
-                    getRouter()?.handleDeepLink(deepLinkMsg)
+                    DefaultDeepLinkManager().navigateToDeepLink(rootComponent, deepLinkMsg)
                 }
             )
         }
@@ -101,7 +85,7 @@ fun HomeScreen(
         append(amadeusHotelAppUrl)
         addStyle(
             style = SpanStyle(
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             ),
             start = 0,
@@ -118,34 +102,34 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth(),
             text = "The Company",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold
         )
         Spacer(Modifier.height(16.dp))
         Text(
             text = "Macao is a digital agency located in Miami Florida. The company specializes in bringing digital products to life, such as mobile and web Applications.",
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyMedium
         )
         Spacer(Modifier.height(32.dp))
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = "Some Work",
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold
         )
         Spacer(Modifier.height(16.dp))
         Text(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.headlineSmall,
             text = "Amadeus Hotel App"
         )
         Spacer(Modifier.height(8.dp))
         Text(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyMedium,
             text = "A sample App to book hotels using the Amadeus self service API. Visit the link bellow for more information"
         )
         Spacer(Modifier.height(16.dp))
@@ -154,7 +138,7 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth().clickable {
                 uriHandler.openUri(amadeusHotelAppUrl)
             },
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyMedium,
             text = annotatedString
         )
         Spacer(Modifier.height(56.dp))

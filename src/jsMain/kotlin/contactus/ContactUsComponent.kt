@@ -1,16 +1,12 @@
+package contactus
+
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,17 +15,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.macaosoftware.component.core.Component
+import com.macaosoftware.component.topbar.TopBar
+import com.macaosoftware.component.topbar.TopBarState
+import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
-import com.mohamedrejeb.richeditor.ui.material3.OutlinedRichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichText
-import com.pablichj.templato.component.core.Component
-import com.pablichj.templato.component.core.router.DeepLinkMatchData
-import com.pablichj.templato.component.core.router.DeepLinkMatchType
-import com.pablichj.templato.component.core.topbar.TopBar
-import com.pablichj.templato.component.core.topbar.TopBarState
-import com.pablichj.templato.component.core.topbar.TopBarStatePresenterDefault
+import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
+import texteditor.RichTextStyleRow
 
-class AboutUsTopBarComponent(
+class ContactUsTopBarComponent(
     val screenName: String,
 ) : Component() {
 
@@ -40,8 +35,8 @@ class AboutUsTopBarComponent(
         topBarStatePresenter.topBarState.value = TopBarState(
             title = "Contact US",
             onTitleClick = {},
-            icon1 = Icons.Default.ArrowBack,
-            onIcon1Click = {
+            backNavigationIcon = Icons.Default.ArrowBack,
+            onBackNavigationIconClick = {
                 handleBackPressed()
             }
         )
@@ -54,17 +49,6 @@ class AboutUsTopBarComponent(
     override fun onStop() {
         println("CustomTopBarComponent::onStop()")
     }
-
-    // region: DeepLink
-
-    override fun getDeepLinkHandler(): DeepLinkMatchData {
-        return DeepLinkMatchData(
-            screenName,
-            DeepLinkMatchType.MatchOne
-        )
-    }
-
-    // endregion
 
     @Composable
     override fun Content(modifier: Modifier) {
@@ -83,7 +67,6 @@ class AboutUsTopBarComponent(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendMessageForm(
     modifier: Modifier,
@@ -100,9 +83,13 @@ fun SendMessageForm(
             fontWeight = FontWeight.SemiBold
         )
         Spacer(Modifier.height(24.dp))
-        OutlinedRichTextEditor(
-            modifier = Modifier.fillMaxWidth(),
+        RichTextEditor(
             state = outlinedRichTextState,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = true,
+            readOnly = true,
+            maxLines = 20,
+            label = {}
         )
         RichTextStyleRow(
             modifier = Modifier.fillMaxWidth(),
@@ -120,7 +107,7 @@ fun SendMessageForm(
             TextButton(
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colors.onSurface.copy(
+                    contentColor = MaterialTheme.colorScheme.onSurface.copy(
                         alpha = 0.66f
                     )
                 )
