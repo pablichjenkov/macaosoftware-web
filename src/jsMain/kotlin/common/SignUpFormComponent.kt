@@ -1,28 +1,14 @@
+package common
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -34,9 +20,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.pablichj.templato.component.core.Component
+import com.macaosoftware.component.core.Component
 
-class SignUpFormComponent: Component() {
+class SignUpFormComponent : Component() {
     @Composable
     override fun Content(modifier: Modifier) {
 
@@ -75,12 +61,12 @@ fun SignUpForm() {
     ) {
         Text(
             text = "Create Free Account",
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.headlineMedium
         )
         Spacer(Modifier.height(12.dp))
         Text(
             text = "Gain access to the full Composables catalog",
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.bodyLarge
         )
         Spacer(Modifier.height(24.dp))
         OutlinedTextField(
@@ -179,7 +165,7 @@ fun SignUpForm() {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = { /*TODO*/ },
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = MaterialTheme.colors.onSurface.copy(
+                    contentColor = MaterialTheme.colorScheme.onSurface.copy(
                         alpha = 0.66f
                     )
                 )
@@ -204,7 +190,7 @@ fun TermsAndConditions() {
 
         addStyle(
             style = SpanStyle(
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold
             ),
             start = start,
@@ -220,7 +206,7 @@ fun TermsAndConditions() {
     }
     val uriHandler = LocalUriHandler.current
     ClickableText(
-        style = MaterialTheme.typography.body1.copy(
+        style = MaterialTheme.typography.bodyLarge.copy(
             color = LocalContentColor.current
         ),
         text = annotatedString,

@@ -1,3 +1,5 @@
+package texteditor
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*

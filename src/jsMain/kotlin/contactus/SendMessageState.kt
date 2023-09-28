@@ -1,3 +1,5 @@
+package contactus
+
 import androidx.compose.runtime.mutableStateOf
 
 class SendMessageState {

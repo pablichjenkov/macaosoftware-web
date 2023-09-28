@@ -1,17 +1,19 @@
+package common
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pablichj.templato.component.core.Component
-import com.pablichj.templato.component.core.consumeBackPressEvent
+import com.macaosoftware.component.core.BackPressHandler
+import com.macaosoftware.component.core.Component
 
 class SimpleComponent(
     val text: String,
@@ -33,7 +35,7 @@ class SimpleComponent(
     @Composable
     override fun Content(modifier: Modifier) {
         println("SimpleComponent::Composing()")
-        consumeBackPressEvent()
+        BackPressHandler()
         Box(modifier = modifier.fillMaxSize()) {
             Text(
                 modifier = Modifier

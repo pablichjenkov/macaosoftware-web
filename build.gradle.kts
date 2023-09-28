@@ -21,10 +21,12 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.ui)
-                implementation(compose.material)
+                implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
-                implementation("io.github.pablichjenkov:component-toolkit:0.4.5")
-                implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-beta01")
+                implementation("io.github.pablichjenkov:component-toolkit:0.5.6")
+                implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-beta03")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.7.3")
             }
         }
     }
