@@ -1,6 +1,6 @@
 <H2>macaosoftware-web</H2>
 
-The code behind `macaosoftware.com` lives right in this repo. The project is written in **Kotlin** language using the **compose-js** compilation target.
+The code behind `macao-software.com` lives right in this repo. The project is written in **Kotlin** language using the **compose-js** compilation target.
 
 <H3> How to run it</H3>
 
