@@ -20,8 +20,8 @@ import com.macaosoftware.component.topbar.TopBar
 import com.macaosoftware.component.topbar.TopBarState
 import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
+import com.mohamedrejeb.richeditor.ui.material3.OutlinedRichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichText
-import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import texteditor.RichTextStyleRow
 
 class ContactUsTopBarComponent(
@@ -67,6 +67,7 @@ class ContactUsTopBarComponent(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendMessageForm(
     modifier: Modifier,
@@ -83,7 +84,7 @@ fun SendMessageForm(
             fontWeight = FontWeight.SemiBold
         )
         Spacer(Modifier.height(24.dp))
-        RichTextEditor(
+        OutlinedRichTextEditor(
             state = outlinedRichTextState,
             modifier = Modifier.fillMaxWidth(),
             enabled = true,

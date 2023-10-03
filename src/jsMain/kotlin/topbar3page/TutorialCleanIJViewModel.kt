@@ -1,10 +1,11 @@
 package topbar3page
 
-import common.SimpleComponent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import com.macaosoftware.component.core.Component
+import com.macaosoftware.component.core.push
 import com.macaosoftware.component.topbar.*
+import common.SimpleComponent
 
 class TutorialCleanIJViewModel(
     topBarComponent: TopBarComponent<TutorialCleanIJViewModel>,
@@ -13,16 +14,18 @@ class TutorialCleanIJViewModel(
     private val onMessage: (Msg) -> Unit
 ) : TopBarComponentViewModel(topBarComponent) {
 
+    private val tutorialCleanIJComponent = topBarComponent
+
     val Step1 = SimpleComponent(
         "$screenName/Page 1",
     ) { msg ->
         when (msg) {
             SimpleComponent.Msg.Next -> {
-                topBarComponent.backStack.push(Step2)
+                tutorialCleanIJComponent.navigator.push(Step2)
             }
         }
     }.also {
-        it.setParent(topBarComponent)
+        it.setParent(tutorialCleanIJComponent)
     }
 
     val Step2 = SimpleComponent(
@@ -30,11 +33,11 @@ class TutorialCleanIJViewModel(
     ) { msg ->
         when (msg) {
             SimpleComponent.Msg.Next -> {
-                topBarComponent.backStack.push(Step3)
+                tutorialCleanIJComponent.navigator.push(Step3)
             }
         }
     }.also {
-        it.setParent(topBarComponent)
+        it.setParent(tutorialCleanIJComponent)
     }
 
     val Step3 =
@@ -48,7 +51,7 @@ class TutorialCleanIJViewModel(
                 }
             }
         }.also {
-            it.setParent(topBarComponent)
+            it.setParent(tutorialCleanIJComponent)
         }
 
     private var activeComponent: Component? = null
@@ -96,7 +99,7 @@ class TutorialCleanIJViewModel(
     }
 
     override fun onCreate() {
-        topBarComponent.uriFragment = screenName
+        tutorialCleanIJComponent.uriFragment = screenName
     }
 
     override fun onDestroy() {
@@ -106,7 +109,7 @@ class TutorialCleanIJViewModel(
     override fun onStart() {
         if (activeComponent == null) {
             activeComponent = Step1
-            topBarComponent.backStack.push(Step1)
+            tutorialCleanIJComponent.navigator.push(Step1)
         }
 
     }
