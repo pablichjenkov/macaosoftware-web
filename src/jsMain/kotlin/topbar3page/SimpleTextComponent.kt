@@ -1,4 +1,4 @@
-package common
+package topbar3page
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,17 +15,17 @@ import androidx.compose.ui.unit.sp
 import com.macaosoftware.component.core.BackPressHandler
 import com.macaosoftware.component.core.Component
 
-class SimpleComponent(
+class SimpleTextComponent(
     val text: String,
     val onMessage: (Msg) -> Unit
 ) : Component() {
 
     override fun onStart() {
-        println("SimpleComponent::start()")
+        println("SimpleTextComponent::start()")
     }
 
     override fun onStop() {
-        println("SimpleComponent::stop()")
+        println("SimpleTextComponent::stop()")
     }
 
     sealed interface Msg {
@@ -34,7 +34,7 @@ class SimpleComponent(
 
     @Composable
     override fun Content(modifier: Modifier) {
-        println("SimpleComponent::Composing()")
+        println("SimpleTextComponent::Composing()")
         BackPressHandler()
         Box(modifier = modifier.fillMaxSize()) {
             Text(

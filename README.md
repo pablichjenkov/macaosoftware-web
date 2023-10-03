@@ -6,7 +6,7 @@ The code behind `macao-software.com` lives right in this repo. The project is wr
 
 `./gradlew jsBrowserRun` - run application in a browser
 
-`./gradlew jsBrowserProductionWebpack` - produce the output in `build/distributions`
+`./gradlew jsBrowserProductionWebpack` - produce the output in `/build/dist/js/productionExecutable`
 
 <H3>Deploy to production</H3>
 
