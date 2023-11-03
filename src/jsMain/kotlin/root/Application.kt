@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.macaosoftware.component.BrowserComponentRender
 import com.macaosoftware.component.panel.PanelComponent
 import com.macaosoftware.component.panel.PanelComponentDefaults
+import com.macaosoftware.component.panel.PanelHeaderStateDefault
+import com.macaosoftware.component.panel.PanelStyle
 import com.macaosoftware.platform.JsBridge
 
 @Composable
@@ -29,9 +31,19 @@ internal fun Application() {
     val jsBridge = remember { JsBridge() }
 
     val panelComponent = remember(Unit) {
+
+        val panelStatePresenter = PanelComponentDefaults.createPanelStatePresenter(
+            panelHeaderState = PanelHeaderStateDefault(
+                title = "Macao SUI",
+                description = "Download the Macao App and customize right from here.",
+                imageUri = "no_image",
+                style = PanelStyle()
+            )
+        )
+
         PanelComponent<AppLeftPanelViewModel>(
             viewModelFactory = AppLeftPanelViewModelFactory(
-                panelStatePresenter = PanelComponentDefaults.createPanelStatePresenter(),
+                panelStatePresenter = panelStatePresenter,
             ),
             content = PanelComponentDefaults.PanelComponentView
         )

@@ -22,7 +22,7 @@ class AppLeftPanelViewModel(
     override val panelStatePresenter: PanelStatePresenter
 ) : PanelComponentViewModel(panelComponent) {
 
-    override fun onCreate() {
+    override fun onAttach() {
         panelComponent.uriFragment = "navigation_panel_component"
         val panelNavItems = createPanelNavItems()
         panelComponent.setNavItems(panelNavItems, 0)
@@ -36,7 +36,7 @@ class AppLeftPanelViewModel(
 
     }
 
-    override fun onDestroy() {
+    override fun onDetach() {
 
     }
 
