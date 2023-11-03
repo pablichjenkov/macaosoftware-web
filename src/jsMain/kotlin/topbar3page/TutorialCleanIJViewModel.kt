@@ -85,10 +85,6 @@ class TutorialCleanIJViewModel(
         }
     }
 
-    override fun onBackstackEmpty() {
-
-    }
-
     override fun onCheckChildForNextUriFragment(nextUriFragment: String): Component? {
         return when (nextUriFragment) {
             "Page1" -> Step1
@@ -98,12 +94,8 @@ class TutorialCleanIJViewModel(
         }
     }
 
-    override fun onCreate() {
+    override fun onAttach() {
         tutorialCleanIJComponent.uriFragment = screenName
-    }
-
-    override fun onDestroy() {
-
     }
 
     override fun onStart() {
@@ -115,6 +107,10 @@ class TutorialCleanIJViewModel(
     }
 
     override fun onStop() {
+
+    }
+
+    override fun onDetach() {
 
     }
 
