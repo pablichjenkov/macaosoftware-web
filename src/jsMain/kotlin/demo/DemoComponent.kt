@@ -1,4 +1,4 @@
-package contactus
+package demo
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,12 +40,12 @@ import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import common.ClipBoardPasteButton
 import kotlinx.browser.window
 
-class ContactUsTopBarComponent(
+class DemoComponent(
     val screenName: String,
 ) : Component() {
 
     private val topBarStatePresenter = TopBarStatePresenterDefault()
-    private val sendMessageState = SendMessageState()
+    private val jsonMetadataState = JsonMetadataState()
 
     init {
         topBarStatePresenter.topBarState.value = TopBarState(
@@ -78,21 +77,24 @@ class ContactUsTopBarComponent(
             modifier = modifier,
             topBar = { TopBar(topBarStatePresenter) }
         ) { paddingValues ->
-            SendMessageForm(Modifier.padding(paddingValues), sendMessageState)
+            JsonMetadataForm(
+                Modifier.padding(paddingValues),
+                jsonMetadataState
+            )
         }
     }
 
 }
 
 @Composable
-fun SendMessageForm(
+fun JsonMetadataForm(
     modifier: Modifier,
-    sendMessageState: SendMessageState
+    jsonMetadataState: JsonMetadataState
 ) {
     val clipboardManager = window.navigator.clipboard
     var isCmdPress by remember { mutableStateOf(false) }
     var isPasteCmd by remember { mutableStateOf(false) }
-    var customerMessage by remember { mutableStateOf("") }
+    var jsonMetadataText by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -107,14 +109,13 @@ fun SendMessageForm(
         )
         Row {
             ClipBoardPasteButton {
-                customerMessage = it
+                jsonMetadataText = it
             }
-            Spacer(Modifier.width(16.dp).height(24.dp))
-            SendButton {
 
+            SendButton {
+                // todo: implement ktor service call
             }
         }
-
         Spacer(Modifier.height(16.dp))
         OutlinedTextField(
             modifier = Modifier
@@ -133,7 +134,7 @@ fun SendMessageForm(
                                     isCmdPress = false
                                     if (isPasteCmd) {
                                         clipboardManager.readText().then {
-                                            customerMessage = it
+                                            jsonMetadataText = it
                                         }
                                     }
                                     isPasteCmd = false
@@ -159,9 +160,9 @@ fun SendMessageForm(
                         else -> false
                     }
                 },
-            value = customerMessage,
-            onValueChange = { customerMessage = it },
-            label = { Text("Message") }
+            value = jsonMetadataText,
+            onValueChange = { jsonMetadataText = it },
+            label = { Text("App Json") }
         )
     }
 }
@@ -173,7 +174,9 @@ private fun SendButton(
     TextButton(
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onSurface
+            contentColor = MaterialTheme.colorScheme.onSurface.copy(
+                alpha = 0.66f
+            )
         )
     ) {
         Text("Send")
