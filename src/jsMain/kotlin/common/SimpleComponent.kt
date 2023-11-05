@@ -36,7 +36,7 @@ class SimpleComponent(
     override fun Content(modifier: Modifier) {
         println("SimpleComponent::Composing()")
         BackPressHandler()
-        Box(modifier = modifier.fillMaxSize()) {
+        Box(modifier = modifier.fillMaxSize().padding(horizontal = 16.dp)) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()

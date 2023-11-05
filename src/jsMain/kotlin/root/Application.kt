@@ -35,7 +35,7 @@ internal fun Application() {
         val panelStatePresenter = PanelComponentDefaults.createPanelStatePresenter(
             panelHeaderState = PanelHeaderStateDefault(
                 title = "Macao SUI",
-                description = "Download the Macao App and customize right from here.",
+                description = "Download the Macao App and customize it right from here.",
                 imageUri = "no_image",
                 style = PanelStyle()
             )

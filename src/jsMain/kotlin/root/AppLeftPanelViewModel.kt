@@ -1,8 +1,7 @@
 package root
 
-import contactus.ContactUsTopBarComponent
-import home.HomeComponent
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Refresh
@@ -14,6 +13,9 @@ import com.macaosoftware.component.panel.PanelComponentViewModelFactory
 import com.macaosoftware.component.panel.PanelStatePresenter
 import com.macaosoftware.component.topbar.TopBarComponent
 import com.macaosoftware.component.topbar.TopBarComponentDefaults
+import contactus.ContactUsTopBarComponent
+import demo.DemoComponent
+import home.HomeComponent
 import topbar3page.TutorialCleanIJViewModel
 import topbar3page.TutorialCleanIJViewModelFactory
 
@@ -45,24 +47,39 @@ class AppLeftPanelViewModel(
             NavItem(
                 label = "Home",
                 icon = Icons.Filled.Home,
-                component = HomeComponent()
+                component = HomeComponent().apply {
+                    uriFragment = "demo"
+                }
             ),
             NavItem(
-                label = "Orders",
+                label = "Demo",
+                icon = Icons.Filled.Apps,
+                component = DemoComponent(
+                    screenName = "Playground"
+                ).apply {
+                    uriFragment = "demo"
+                }
+            ),
+            NavItem(
+                label = "My Account",
                 icon = Icons.Filled.Refresh,
                 component = TopBarComponent<TutorialCleanIJViewModel>(
                     viewModelFactory = TutorialCleanIJViewModelFactory(
                         topBarStatePresenter = TopBarComponentDefaults.createTopBarStatePresenter(),
-                        screenName = "Orders",
+                        screenName = "My Account",
                         onMessage = {}
                     ),
                     content = TopBarComponentDefaults.TopBarComponentView
-                )
+                ).apply {
+                    uriFragment = "my_account"
+                }
             ),
             NavItem(
                 label = "Contact Us",
                 icon = Icons.Filled.Email,
-                component = ContactUsTopBarComponent("Contact Us").apply {
+                component = ContactUsTopBarComponent(
+                    screenName = "Contact Us"
+                ).apply {
                     uriFragment = "contact_us"
                 }
             )
