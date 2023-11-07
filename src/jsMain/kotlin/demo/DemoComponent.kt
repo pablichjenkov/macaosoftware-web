@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
@@ -38,7 +40,11 @@ import com.macaosoftware.component.topbar.TopBar
 import com.macaosoftware.component.topbar.TopBarState
 import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import common.ClipBoardPasteButton
+import domain.CallResult
+import domain.GetCustomerProjectsUseCase
 import kotlinx.browser.window
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DemoComponent(
     val screenName: String,
@@ -96,6 +102,8 @@ fun JsonMetadataForm(
     var isPasteCmd by remember { mutableStateOf(false) }
     var jsonMetadataText by remember { mutableStateOf("") }
 
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -111,9 +119,29 @@ fun JsonMetadataForm(
             ClipBoardPasteButton {
                 jsonMetadataText = it
             }
-
+            Spacer(Modifier.width(16.dp).height(24.dp))
             SendButton {
-                // todo: implement ktor service call
+                coroutineScope.launch {
+                    val result = GetCustomerProjectsUseCase(
+                        dispatcher = Dispatchers
+                    ).doWork()
+
+                    when (result) {
+                        is CallResult.Error -> {
+                            jsonMetadataText = result.error.toString()
+                        }
+
+                        is CallResult.Success -> {
+                            val customerProjectsText =
+                                result.responseBody.fold("Projects:") { acc, customerProject ->
+                                    acc.plus("\n")
+                                        .plus("ownerId = ${customerProject.ownerId}").plus("\n")
+                                        .plus("jsonMetadata = ${customerProject.jsonMetadata}")
+                                }
+                            jsonMetadataText = customerProjectsText
+                        }
+                    }
+                }
             }
         }
         Spacer(Modifier.height(16.dp))
