@@ -26,7 +26,7 @@ import com.macaosoftware.component.panel.PanelStyle
 import com.macaosoftware.platform.JsBridge
 
 @Composable
-internal fun Application() {
+internal fun ComposeApplication() {
 
     val jsBridge = remember { JsBridge() }
 

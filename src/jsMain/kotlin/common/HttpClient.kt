@@ -1,4 +1,4 @@
-package data
+package common
 
 import io.ktor.client.*
 import io.ktor.client.plugins.*

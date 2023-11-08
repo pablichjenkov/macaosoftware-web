@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -24,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -40,8 +43,11 @@ import com.macaosoftware.component.topbar.TopBar
 import com.macaosoftware.component.topbar.TopBarState
 import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import common.ClipBoardPasteButton
-import domain.CallResult
-import domain.GetCustomerProjectsUseCase
+import common.CallResult
+import demo.domain.model.CustomerProjectUpdateRequest
+import demo.domain.GetCustomerProjectByOwnerIdUseCase
+import demo.domain.GetCustomerProjectListUseCase
+import demo.domain.UpdateCustomerProjectByOwnerIdUseCase
 import kotlinx.browser.window
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,12 +70,20 @@ class DemoComponent(
         )
     }
 
+    override fun onAttach() {
+        println("CustomTopBarComponent::onAttach()")
+    }
+
     override fun onStart() {
         println("CustomTopBarComponent::onStart()")
     }
 
     override fun onStop() {
         println("CustomTopBarComponent::onStop()")
+    }
+
+    override fun onDetach() {
+        println("CustomTopBarComponent::onDetach()")
     }
 
     @Composable
@@ -100,6 +114,7 @@ fun JsonMetadataForm(
     val clipboardManager = window.navigator.clipboard
     var isCmdPress by remember { mutableStateOf(false) }
     var isPasteCmd by remember { mutableStateOf(false) }
+    var ownerId by remember { mutableStateOf("") }
     var jsonMetadataText by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
@@ -111,36 +126,41 @@ fun JsonMetadataForm(
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            text = "Send us a brief explanation of what your App will do:",
+            text = "Use your ownerId value to retrieve your App metadata and modify it.",
             fontSize = TextUnit(20F, TextUnitType.Sp),
             fontWeight = FontWeight.SemiBold
         )
-        Row {
-            ClipBoardPasteButton {
-                jsonMetadataText = it
+        Row(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight()
+        ) {
+            Column(
+                modifier = Modifier.weight(1.0F).padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                OutlinedTextField(
+                    value = ownerId,
+                    onValueChange = {
+                        ownerId = it
+                    },
+                    label = { Text("ownerId") }
+                )
+                Spacer(Modifier.width(16.dp).height(16.dp))
+                ClipBoardPasteButton {
+                    jsonMetadataText = it
+                }
             }
-            Spacer(Modifier.width(16.dp).height(24.dp))
-            SendButton {
-                coroutineScope.launch {
-                    val result = GetCustomerProjectsUseCase(
-                        dispatcher = Dispatchers
-                    ).doWork()
-
-                    when (result) {
-                        is CallResult.Error -> {
-                            jsonMetadataText = result.error.toString()
-                        }
-
-                        is CallResult.Success -> {
-                            val customerProjectsText =
-                                result.responseBody.fold("Projects:") { acc, customerProject ->
-                                    acc.plus("\n")
-                                        .plus("ownerId = ${customerProject.ownerId}").plus("\n")
-                                        .plus("jsonMetadata = ${customerProject.jsonMetadata}")
-                                }
-                            jsonMetadataText = customerProjectsText
-                        }
-                    }
+            Column(
+                modifier = Modifier.weight(1.0F).padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ButtonGetMetadata(ownerId) {
+                    jsonMetadataText = it
+                }
+                Spacer(Modifier.width(16.dp).height(16.dp))
+                ButtonUpdateMetadata(
+                    CustomerProjectUpdateRequest(ownerId, jsonMetadataText)
+                ) {
+                    jsonMetadataText = it
                 }
             }
         }
@@ -192,6 +212,98 @@ fun JsonMetadataForm(
             onValueChange = { jsonMetadataText = it },
             label = { Text("App Json") }
         )
+    }
+}
+
+@Composable
+private fun ButtonGetMetadata(
+    ownerId: String,
+    onResult: (String) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    Button(onClick = {
+        if (ownerId.isNullOrEmpty()) {
+            onResult("ownerId cannot be empty. Apply for one in the Account session")
+            return@Button
+        }
+        coroutineScope.launch {
+            val result = GetCustomerProjectByOwnerIdUseCase(
+                dispatcher = Dispatchers
+            ).doWork(ownerId)
+
+            when (result) {
+                is CallResult.Error -> {
+                    onResult(result.error.toString())
+                }
+
+                is CallResult.Success -> {
+                    onResult(result.responseBody.jsonMetadata)
+                }
+            }
+        }
+    }) {
+        Text("Get Metadata")
+    }
+}
+
+@Composable
+private fun ButtonUpdateMetadata(
+    updateRequest: CustomerProjectUpdateRequest,
+    onResult: (String) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    Button(onClick = {
+        if (updateRequest.ownerId.isNullOrEmpty()) {
+            onResult("ownerId cannot be empty. Apply for one in the Account session")
+            return@Button
+        }
+        coroutineScope.launch {
+            val result = UpdateCustomerProjectByOwnerIdUseCase(
+                dispatcher = Dispatchers
+            ).doWork(updateRequest)
+
+            when (result) {
+                is CallResult.Error -> {
+                    onResult(result.error.toString())
+                }
+
+                is CallResult.Success -> {
+                    onResult(result.responseBody.jsonMetadata)
+                }
+            }
+        }
+    }) {
+        Text("Update Metadata")
+    }
+}
+
+@Composable
+private fun ButtonListAllCustomers(
+    onResult: (jsonMetadataText: String) -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    SendButton {
+        coroutineScope.launch {
+            val result = GetCustomerProjectListUseCase(
+                dispatcher = Dispatchers
+            ).doWork()
+
+            when (result) {
+                is CallResult.Error -> {
+                    onResult(result.error.toString())
+                }
+
+                is CallResult.Success -> {
+                    val customerProjectsText =
+                        result.responseBody.fold("Projects:") { acc, customerProject ->
+                            acc.plus("\n")
+                                .plus("ownerId = ${customerProject.ownerId}").plus("\n")
+                                .plus("jsonMetadata = ${customerProject.jsonMetadata}")
+                        }
+                    onResult(customerProjectsText)
+                }
+            }
+        }
     }
 }
 
