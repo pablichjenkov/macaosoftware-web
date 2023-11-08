@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -122,14 +123,16 @@ fun JsonMetadataForm(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        Spacer(Modifier.width(16.dp).height(16.dp))
         Text(
-            text = "Use your ownerId value to retrieve your App metadata and modify it.",
+            text = "Use your `ownerId` value in the box and tap `Get Metadata` to retrieve your App json. Then modify it on the panel bellow and Tap `Update Metadata`. Then close/open the Macao mobile App and verify the changes are there",
             fontSize = TextUnit(20F, TextUnitType.Sp),
             fontWeight = FontWeight.SemiBold
         )
+        Spacer(Modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
         ) {
@@ -168,7 +171,7 @@ fun JsonMetadataForm(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1.0f)
+                .requiredHeight(400.dp)
                 .onPreviewKeyEvent {
                     println("Pablo::onKeyEvent = $it")
                     when {
@@ -212,6 +215,7 @@ fun JsonMetadataForm(
             onValueChange = { jsonMetadataText = it },
             label = { Text("App Json") }
         )
+        Spacer(Modifier.height(16.dp))
     }
 }
 
