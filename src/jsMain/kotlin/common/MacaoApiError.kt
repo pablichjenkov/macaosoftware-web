@@ -1,3 +1,5 @@
+package common
+
 import io.ktor.utils.io.errors.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

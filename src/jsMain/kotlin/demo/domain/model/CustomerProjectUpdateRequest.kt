@@ -1,9 +1,9 @@
-package data
+package demo.domain.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CustomerProject(
+data class CustomerProjectUpdateRequest(
     val ownerId: String,
     val jsonMetadata: String
 )

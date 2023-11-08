@@ -114,7 +114,6 @@ fun SendMessageForm(
 
             }
         }
-
         Spacer(Modifier.height(16.dp))
         OutlinedTextField(
             modifier = Modifier

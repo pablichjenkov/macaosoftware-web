@@ -1,6 +1,4 @@
-package domain
-
-import MacaoApiError
+package common
 
 sealed class CallResult<out T> {
     class Error(val error: MacaoApiError) : CallResult<Nothing>()
