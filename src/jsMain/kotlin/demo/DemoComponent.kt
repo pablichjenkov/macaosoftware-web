@@ -43,8 +43,8 @@ import com.macaosoftware.component.core.Component
 import com.macaosoftware.component.topbar.TopBar
 import com.macaosoftware.component.topbar.TopBarState
 import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
-import common.ClipBoardPasteButton
-import common.Result
+import ui.ClipBoardPasteButton
+import util.Result
 import demo.domain.model.CustomerProjectUpdateRequest
 import demo.domain.usecase.GetCustomerProjectByOwnerIdUseCase
 import demo.domain.usecase.GetCustomerProjectListUseCase

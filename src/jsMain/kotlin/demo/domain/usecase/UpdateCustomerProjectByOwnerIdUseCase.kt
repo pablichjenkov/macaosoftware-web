@@ -1,9 +1,9 @@
 package demo.domain.usecase
 
-import common.MacaoApiError
-import common.Result
-import common.SingleInputUseCase
-import common.httpClient
+import http.MacaoApiError
+import util.Result
+import util.SingleInputUseCase
+import http.httpClient
 import demo.data.CustomerProject
 import demo.domain.model.CustomerProjectUpdateRequest
 import io.ktor.client.call.*

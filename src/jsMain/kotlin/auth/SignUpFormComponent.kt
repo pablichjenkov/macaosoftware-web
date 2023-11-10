@@ -1,4 +1,4 @@
-package common
+package auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,8 +29,6 @@ class SignUpFormComponent : Component() {
     }
 }
 
-// @OptIn(ExperimentalMaterial3Api::class)
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpForm() {
     var fullname by remember { mutableStateOf("Matias Duarte") }
