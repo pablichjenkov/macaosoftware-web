@@ -44,18 +44,16 @@ import com.macaosoftware.component.topbar.TopBar
 import com.macaosoftware.component.topbar.TopBarState
 import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import common.ClipBoardPasteButton
-import common.CallResult
+import common.Result
 import demo.domain.model.CustomerProjectUpdateRequest
-import demo.domain.GetCustomerProjectByOwnerIdUseCase
-import demo.domain.GetCustomerProjectListUseCase
-import demo.domain.UpdateCustomerProjectByOwnerIdUseCase
+import demo.domain.usecase.GetCustomerProjectByOwnerIdUseCase
+import demo.domain.usecase.GetCustomerProjectListUseCase
+import demo.domain.usecase.UpdateCustomerProjectByOwnerIdUseCase
 import kotlinx.browser.window
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DemoComponent(
-    val screenName: String,
-) : Component() {
+class DemoComponent : Component() {
 
     private val topBarStatePresenter = TopBarStatePresenterDefault()
     private val jsonMetadataState = JsonMetadataState()
@@ -226,7 +224,7 @@ private fun ButtonGetMetadata(
 ) {
     val coroutineScope = rememberCoroutineScope()
     Button(onClick = {
-        if (ownerId.isNullOrEmpty()) {
+        if (ownerId.isEmpty()) {
             onResult("ownerId cannot be empty. Apply for one in the Account session")
             return@Button
         }
@@ -236,12 +234,12 @@ private fun ButtonGetMetadata(
             ).doWork(ownerId)
 
             when (result) {
-                is CallResult.Error -> {
+                is Result.Error -> {
                     onResult(result.error.toString())
                 }
 
-                is CallResult.Success -> {
-                    onResult(result.responseBody.jsonMetadata)
+                is Result.Success -> {
+                    onResult(result.value.jsonMetadata)
                 }
             }
         }
@@ -257,7 +255,7 @@ private fun ButtonUpdateMetadata(
 ) {
     val coroutineScope = rememberCoroutineScope()
     Button(onClick = {
-        if (updateRequest.ownerId.isNullOrEmpty()) {
+        if (updateRequest.ownerId.isEmpty()) {
             onResult("ownerId cannot be empty. Apply for one in the Account session")
             return@Button
         }
@@ -267,12 +265,12 @@ private fun ButtonUpdateMetadata(
             ).doWork(updateRequest)
 
             when (result) {
-                is CallResult.Error -> {
+                is Result.Error -> {
                     onResult(result.error.toString())
                 }
 
-                is CallResult.Success -> {
-                    onResult(result.responseBody.jsonMetadata)
+                is Result.Success -> {
+                    onResult(result.value.jsonMetadata)
                 }
             }
         }
@@ -293,13 +291,13 @@ private fun ButtonListAllCustomers(
             ).doWork()
 
             when (result) {
-                is CallResult.Error -> {
+                is Result.Error -> {
                     onResult(result.error.toString())
                 }
 
-                is CallResult.Success -> {
+                is Result.Success -> {
                     val customerProjectsText =
-                        result.responseBody.fold("Projects:") { acc, customerProject ->
+                        result.value.fold("Projects:") { acc, customerProject ->
                             acc.plus("\n")
                                 .plus("ownerId = ${customerProject.ownerId}").plus("\n")
                                 .plus("jsonMetadata = ${customerProject.jsonMetadata}")
