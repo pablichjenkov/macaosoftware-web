@@ -1,23 +1,22 @@
-package demo.domain
+package demo.domain.usecase
 
 import common.MacaoApiError
-import common.CallResult
+import common.Result
 import common.SingleNoInputUseCase
+import common.httpClient
 import demo.data.CustomerProject
 import demo.domain.model.CustomerProjectListRequest
-import common.httpClient
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class GetCustomerProjectListUseCase(
     private val dispatcher: Dispatchers,
-) : SingleNoInputUseCase<CallResult<List<CustomerProject>>> {
+) : SingleNoInputUseCase<Result<List<CustomerProject>>> {
 
-    override suspend fun doWork(): CallResult<List<CustomerProject>> {
+    override suspend fun doWork(): Result<List<CustomerProject>> {
         return withContext(dispatcher.Default) {
             try {
                 val response = httpClient.post(getCustomerProjects) {
@@ -25,13 +24,13 @@ class GetCustomerProjectListUseCase(
                     setBody(CustomerProjectListRequest())
                 }
                 if (response.status.isSuccess()) {
-                    CallResult.Success(response.body())
+                    Result.Success(response.body())
                 } else {
-                    CallResult.Error(MacaoApiError.fromErrorJsonString(response.bodyAsText()))
+                    Result.Error(response.body())
                 }
             } catch (th: Throwable) {
                 th.printStackTrace()
-                CallResult.Error(MacaoApiError.fromException(th))
+                Result.Error(MacaoApiError.fromException(th))
             }
         }
     }

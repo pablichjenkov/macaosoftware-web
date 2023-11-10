@@ -41,9 +41,7 @@ import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
 import common.ClipBoardPasteButton
 import kotlinx.browser.window
 
-class ContactUsTopBarComponent(
-    val screenName: String,
-) : Component() {
+class ContactUsTopBarComponent : Component() {
 
     private val topBarStatePresenter = TopBarStatePresenterDefault()
     private val sendMessageState = SendMessageState()

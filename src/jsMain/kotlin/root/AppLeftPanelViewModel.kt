@@ -31,15 +31,12 @@ class AppLeftPanelViewModel(
     }
 
     override fun onStart() {
-
     }
 
     override fun onStop() {
-
     }
 
     override fun onDetach() {
-
     }
 
     private fun createPanelNavItems(): MutableList<NavItem> {
@@ -54,9 +51,7 @@ class AppLeftPanelViewModel(
             NavItem(
                 label = "Demo",
                 icon = Icons.Filled.Apps,
-                component = DemoComponent(
-                    screenName = "Playground"
-                ).apply {
+                component = DemoComponent().apply {
                     uriFragment = "demo"
                 }
             ),
@@ -77,9 +72,7 @@ class AppLeftPanelViewModel(
             NavItem(
                 label = "Contact Us",
                 icon = Icons.Filled.Email,
-                component = ContactUsTopBarComponent(
-                    screenName = "Contact Us"
-                ).apply {
+                component = ContactUsTopBarComponent().apply {
                     uriFragment = "contact_us"
                 }
             )
