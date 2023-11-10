@@ -1,4 +1,4 @@
-package common
+package ui
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

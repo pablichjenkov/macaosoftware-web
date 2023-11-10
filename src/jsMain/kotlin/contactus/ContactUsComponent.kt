@@ -38,7 +38,7 @@ import com.macaosoftware.component.core.Component
 import com.macaosoftware.component.topbar.TopBar
 import com.macaosoftware.component.topbar.TopBarState
 import com.macaosoftware.component.topbar.TopBarStatePresenterDefault
-import common.ClipBoardPasteButton
+import ui.ClipBoardPasteButton
 import kotlinx.browser.window
 
 class ContactUsTopBarComponent : Component() {

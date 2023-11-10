@@ -5,7 +5,7 @@ import androidx.compose.material.icons.filled.Star
 import com.macaosoftware.component.core.Component
 import com.macaosoftware.component.core.push
 import com.macaosoftware.component.topbar.*
-import common.SimpleComponent
+import ui.SimpleComponent
 
 class TutorialCleanIJViewModel(
     topBarComponent: TopBarComponent<TutorialCleanIJViewModel>,
